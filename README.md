@@ -3,7 +3,7 @@
 
 # Chatmail services optimized for Delta Chat apps - now on openSUSE
 
-This repository contains a fork of the original deltachat/chatmail, with the primary goal of supporting a deployment on openSUSE MicroOS. At the moment, there I'm working at support for openSUSE Tumbleweed. Supporting the immutable MicroOS is the next step then.
+This repository contains a fork of the original deltachat/chatmail, with the primary goal of supporting a deployment on openSUSE MicroOS. At the moment, I'm working on support for openSUSE Tumbleweed. Supporting the immutable MicroOS is the next step.
 
 Currently, this project doesn't use DeltaChat's high speed dovecot fork, but the regular dovecot packaged by the openSUSE project.
 
