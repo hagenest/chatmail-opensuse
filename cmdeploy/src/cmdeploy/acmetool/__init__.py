@@ -2,14 +2,22 @@ import importlib.resources
 
 from pyinfra import host
 from pyinfra.facts.systemd import SystemdStatus
-from pyinfra.operations import apt, files, server, systemd
+from pyinfra.operations import zypper, files, server, systemd
 
 
 def deploy_acmetool(email="", domains=[]):
-    """Deploy acmetool."""
-    apt.packages(
-        name="Install acmetool",
-        packages=["acmetool"],
+
+    # here the acmetool binary is put manually into $PATH,
+    # because it is not packaged in opensuse.
+    # i hate this.
+    # but it is, what it is
+
+    files.put(
+        src=importlib.resources.files(__package__).joinpath("acmetool"),
+        dest="/usr/bin/acmetool",
+        user="root",
+        group="root",
+        mode="755"
     )
 
     files.put(

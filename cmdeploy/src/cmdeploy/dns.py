@@ -12,7 +12,7 @@ class DNS:
         self.out = out
         self.ssh = f"ssh root@{mail_domain} -- "
         self.out.shell_output(
-            f"{ self.ssh }'apt-get update && apt-get install -y dnsutils'",
+            f"{ self.ssh }'zypper dup && zypper -n in bind-utils'",
             timeout=60,
             no_print=True,
         )

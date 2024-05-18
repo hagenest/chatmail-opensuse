@@ -13,7 +13,7 @@ from chatmaild.config import Config, read_config
 from pyinfra import host
 from pyinfra.facts.files import File
 from pyinfra.facts.systemd import SystemdEnabled
-from pyinfra.operations import apt, files, pip, server, systemd
+from pyinfra.operations import zypper, files, pip, server, systemd
 
 from .acmetool import deploy_acmetool
 
@@ -52,9 +52,9 @@ def _install_remote_venv_with_chatmaild(config) -> None:
     remote_chatmail_inipath = f"{remote_base_dir}/chatmail.ini"
     root_owned = dict(user="root", group="root", mode="644")
 
-    apt.packages(
-        name="apt install python3-virtualenv",
-        packages=["python3-virtualenv"],
+    zypper.packages(
+        name="zypper install python-virtualenv",
+        packages=["python-virtualenv"],
     )
 
     files.put(
@@ -200,9 +200,9 @@ def _configure_opendkim(domain: str, dkim_selector: str = "dkim") -> bool:
         present=True,
     )
 
-    apt.packages(
-        name="apt install opendkim opendkim-tools",
-        packages=["opendkim", "opendkim-tools"],
+    zypper.packages(
+        name="zypper install opendkim",
+        packages=["opendkim"],
     )
 
     if not host.get_fact(File, f"/etc/dkimkeys/{dkim_selector}.private"):
@@ -433,7 +433,7 @@ def _configure_nginx(domain: str, debug: bool = False) -> bool:
 
 def _remove_rspamd() -> None:
     """Remove rspamd"""
-    apt.packages(name="Remove rspamd", packages="rspamd", present=False)
+    zypper.packages(name="Remove rspamd", packages="rspamd", present=False)
 
 
 def check_config(config):
@@ -484,27 +484,7 @@ def deploy_chatmail(config_path: Path) -> None:
         commands=["test -d /home/vmail && chown -R vmail:vmail /home/vmail"],
     )
 
-    # Add our OBS repository for dovecot_no_delay
-    files.put(
-        name="Add Deltachat OBS GPG key to apt keyring",
-        src=importlib.resources.files(__package__).joinpath("obs-home-deltachat.gpg"),
-        dest="/etc/apt/keyrings/obs-home-deltachat.gpg",
-        user="root",
-        group="root",
-        mode="644",
-    )
-
-    files.line(
-        name="Add DeltaChat OBS home repository to sources.list",
-        path="/etc/apt/sources.list",
-        line="deb [signed-by=/etc/apt/keyrings/obs-home-deltachat.gpg] https://download.opensuse.org/repositories/home:/deltachat/Debian_12/ ./",
-        escape_regex_characters=True,
-        ensure_newline=True,
-    )
-
-    apt.update(name="apt update", cache_time=24 * 3600)
-
-    apt.packages(
+    zypper.packages(
         name="Install rsync",
         packages=["rsync"],
     )
@@ -512,17 +492,11 @@ def deploy_chatmail(config_path: Path) -> None:
     # Run local DNS resolver `unbound`.
     # `resolvconf` takes care of setting up /etc/resolv.conf
     # to use 127.0.0.1 as the resolver.
-    apt.packages(
-        name="Install unbound",
-        packages=["unbound", "unbound-anchor", "dnsutils"],
+    zypper.packages(
+        name="Install unbound and dig",
+        packages=["unbound", "bind-utils"],
     )
-    server.shell(
-        name="Generate root keys for validating DNSSEC",
-        commands=[
-            "unbound-anchor -a /var/lib/unbound/root.key || true",
-            "systemctl reset-failed unbound.service",
-        ],
-    )
+
     systemd.service(
         name="Start and enable unbound",
         service="unbound.service",
@@ -535,30 +509,30 @@ def deploy_chatmail(config_path: Path) -> None:
         domains=[mail_domain, f"mta-sts.{mail_domain}", f"www.{mail_domain}"],
     )
 
-    apt.packages(
+    zypper.packages(
         # required for setfacl for echobot
         name="Install acl",
         packages="acl",
     )
 
-    apt.packages(
+    zypper.packages(
         name="Install Postfix",
         packages="postfix",
     )
 
-    apt.packages(
+    zypper.packages(
         name="Install Dovecot",
-        packages=["dovecot-imapd", "dovecot-lmtpd", "dovecot-sieve"],
+        packages=["dovecot"],
     )
 
-    apt.packages(
+    zypper.packages(
         name="Install nginx",
         packages=["nginx"],
     )
 
-    apt.packages(
+    zypper.packages(
         name="Install fcgiwrap",
-        packages=["fcgiwrap"],
+        packages=["fcgiwrap, fcgiwrap-nginx"],
     )
 
     www_path = importlib.resources.files(__package__).joinpath("../../../www").resolve()

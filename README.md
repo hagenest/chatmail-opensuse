@@ -1,7 +1,20 @@
 
 <img width="800px" src="www/src/collage-top.png"/>
 
-# Chatmail services optimized for Delta Chat apps 
+# Chatmail services optimized for Delta Chat apps - now on openSUSE
+
+This repository contains a fork of the original deltachat/chatmail, with the primary goal of supporting a deployment on openSUSE MicroOS. At the moment, there I'm working at support for openSUSE Tumbleweed. Supporting the immutable MicroOS is the next step then.
+
+Currently, this project doesn't use DeltaChat's high speed dovecot fork, but the regular dovecot packaged by the openSUSE project.
+
+I will try to pull changes from upstream regularly, but please don't use this in production yet.
+
+This project is only a hobby project and not affiliated with any of my (current or previous) employers.
+A chatmail instance using this project is being deployed at mailcow.hagenest.dev
+
+-----------------------------------------------------
+
+*ORIGINAL README BELOW*
 
 This repository helps to setup a ready-to-use chatmail server
 comprised of a minimal setup of the battle-tested 
