@@ -1,21 +1,41 @@
-<img class="banner" src="collage-privacy.png"/>
 
 # Privacy Policy for {{ config.mail_domain }} 
 
-We want to show you in a fair and transparent way
-what personal data is processed by us.
-We follow a strict privacy-by-design approach
-and try to avoid processing your data in the first place,
-but as you may know,
-the internet, 
-and in particular sending e-mail messages,
-does not work without data.
-Still,
-it's only fair that you know at all times
-what personal data is processed
-when you use our service.
+{% if config.mail_domain == "nine.testrun.org" %}
+Welcome to `{{config.mail_domain}}`, the default chatmail onboarding server for Delta Chat users. 
+It is operated on the side by a small sysops team employed by [merlinux](https://merlinux.eu),
+an open-source R&D company also acting as the fiscal sponsor of Delta Chat app developments. 
+See [other chatmail servers](https://delta.chat/en/chatmail) for alternative server operators. 
+{% endif %}
 
-If you have any remaining questions about data protection, please contact us. 
+
+## Summary: No personal data asked or collected 
+
+This chatmail server neither asks for nor retains personal information. 
+Chatmail servers exist to reliably transmit (store and deliver) end-to-end encrypted messages
+between user's devices running the Delta Chat messenger app. 
+Technically, you may think of a Chatmail server as 
+an end-to-end encrypted "messaging router" at Internet-scale. 
+
+A chatmail server is very unlike classic e-mail servers (for example Google Mail servers)
+that ask for personal data and permanently store messages. 
+A chatmail server behaves more like the Signal messaging server 
+but does not know about phone numbers and securely and automatically interoperates 
+with other chatmail and classic e-mail servers. 
+
+In particular, this chatmail server 
+
+- unconditionally removes messages after {{ config.delete_mails_after }} days,
+
+- prohibits sending out un-encrypted messages,
+
+- only has temporary log files used for debugging purposes.
+
+Legally, authorities might still regard chatmail as a "classic e-mail" server
+which collects and retains personal data. 
+We do not agree on this interpretation. Nevertheless, we provide more legal details below
+to make life easier for data protection specialists and lawyers scrutinizing chatmail operations. 
+
 
 ## 1. Name and contact information 
 
@@ -178,8 +198,9 @@ for the purpose of drawing conclusions about your person.
 
 ## 4. Transfer of Data
 
-Your personal data
-will not be transferred to third parties
+We do not retain any personal data but e-mail messages waiting to be delivered 
+may contain personal data.
+Any such residual personal data will not be transferred to third parties
 for purposes other than those listed below:
 
 a) you have given your express consent
