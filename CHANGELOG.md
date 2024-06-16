@@ -2,8 +2,21 @@
 
 ## untagged
 
-- ensure cron is installed
-  ([#310](https://github.com/deltachat/chatmail/pull/310))
+- check that OpenPGP has only PKESK, SKESK and SEIPD packets
+  ([#323](https://github.com/deltachat/chatmail/pull/323),
+   [#324](https://github.com/deltachat/chatmail/pull/324))
+
+- improve filtermail checks for encrypted messages and drop support for unencrypted MDNs
+  ([#320](https://github.com/deltachat/chatmail/pull/320))
+
+## 1.3.0 - 2024-06-06
+
+- don't check necessary DNS records on cmdeploy init anymore
+  ([#316](https://github.com/deltachat/chatmail/pull/316))
+
+- ensure cron and acl are installed
+  ([#293](https://github.com/deltachat/chatmail/pull/293),
+  [#310](https://github.com/deltachat/chatmail/pull/310))
 
 - change default for delete_mails_after from 40 to 20 days
   ([#300](https://github.com/deltachat/chatmail/pull/300))
